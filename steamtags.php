@@ -5,12 +5,6 @@ function write_error($err)
     echo "\n\n<p><font color='#FF0000'>\n\nERROR: $err\n\n</font></p>\n\n";
 } // write_error
 
-function convert_steamid_str($user)
-{
-    write_error("!!! FIXME: write me");
-    return $user;
-} // convert_steamid_str
-
 function steam_base_profile_url($user)
 {
     $profdir = 'profiles';
@@ -20,11 +14,6 @@ function steam_base_profile_url($user)
         $basedir = $profdir;
         $id = $user;
     } // if
-    else if (preg_match('/^STEAM_[0-9]:[0-9]:[0-9]{1,}/i', $user))
-    {
-        $basedir = $profdir;
-        $id = convert_steamid_str($user);
-    } // else if
     else
     {
         $basedir = 'id';
