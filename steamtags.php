@@ -53,6 +53,7 @@ function load_steam_profile($user)
     $profileurl = steam_base_profile_url(empty($scid) ? $steamid64 : $scid);
 
     $profile = array();
+    $profile['valid'] = 1;
     $profile['nickname'] = (string) $sxe->steamID;
     $profile['steamid'] = (string) $steamid64;
     $profile['name'] = $scid;
