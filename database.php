@@ -9,7 +9,7 @@ $dblink = NULL;
 
 function write_error($err)
 {
-    print("\n\n$err\n\n");
+    //print("\n\n$err\n\n");
 } // write_error
 
 function write_debug($err)

@@ -1,10 +1,5 @@
 <?php
 
-function write_error($err)
-{
-    echo "\n\n<p><font color='#FF0000'>\n\nERROR: $err\n\n</font></p>\n\n";
-} // write_error
-
 function steam_base_profile_url($user)
 {
     $profdir = 'profiles';
@@ -43,13 +38,13 @@ function load_steam_profile($user)
     $sxe = url_to_simplexml(steam_profile_url($user));
     if ($sxe === false)
     {
-        write_error("Couldn't load user profile from Steam Community");
+        //write_error("Couldn't load user profile from Steam Community");
         return NULL;
     } // if
 
     if ($sxe->privacyState != 'public')
     {
-        write_error("This user's profile is marked private");
+        //write_error("This user's profile is marked private");
         return NULL;
     } // if
 
@@ -89,7 +84,7 @@ function load_steam_profile($user)
     $sxe = url_to_simplexml(steam_gamelist_url($user));
     if ($sxe === false)
     {
-        write_error("Couldn't load user gamelist from Steam Community");
+        //write_error("Couldn't load user gamelist from Steam Community");
         return NULL;
     } // if
 
