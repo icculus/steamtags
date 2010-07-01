@@ -14,16 +14,17 @@ function render()
         profile.nickname + " (<a href='" + profile.profileurl + "'>" +
         profile.steamid + "</a>)<br/><table border='0'>"
 
-    var game;
-    for (game in profile.gamelist)
+    var gameidx;
+    for (gameidx in profile.gamelist)
     {
-        html += "<tr><td><img src='" + game.logourl + "'/>" +
+        var game = profile.gamelist[gameidx];
+        html += "<tr><td><img width='189' height='69'src='" + game.logourl + "'/>" +
                 "<a href='steam://run/" + game.appid + "'>" + game.title +
                 "</a>";
 
-        var tag;
-        for (tag in game.tags)
-            html += " " + tag;
+        var tagidx;
+        for (tagidx in game.tags)
+            html += " " + game.tags[tagidx];
         html += "</td></tr>";
     } // for
 
@@ -94,7 +95,7 @@ $(document).ready(function(){
     var user = 'icculus';  // !!! FIXME
     $.ajax({
         type: "GET",
-        url: "steamprofdfdfile.php?user=" + user,
+        url: "steamprofile.php?user=" + user,
         dataType: "xml",
         error: function(XMLHttpRequest, textStatus, errorThrown) {
                     var html = "<center><font color='#FF0000'>" +
