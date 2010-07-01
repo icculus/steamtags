@@ -60,8 +60,7 @@ print("<profile>");
                     } // foreach
                 print("</tags>");
             print("</game>");
-        );
-    } // foreach
+        } // foreach
     print("</gamelist>");
 print("</profile>");
 

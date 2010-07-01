@@ -1,5 +1,7 @@
 <?php
 
+require_once('database.php');
+
 function steam_base_profile_url($user)
 {
     $profdir = 'profiles';
@@ -39,6 +41,7 @@ function load_profile_game_tags($profile)
     $id = $profile['steamid'];
     $sql = "select appid, tag from gametags where steamid=$id order by appid";
     $query = do_dbquery($sql);
+    // !!! FIXME: check for db error here!
     while ( ($row = db_fetch_array($query)) != false )
     {
         $game = $gamelist[$row['appid']];
@@ -46,6 +49,7 @@ function load_profile_game_tags($profile)
             continue;  // maybe it was a free weekend game they don't own now?
         $game['tags'][] = $row['tag'];
     } // while
+    return true;
 } // load_profile_game_tags
 
 function load_steam_profile($user)
