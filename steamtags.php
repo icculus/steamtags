@@ -35,7 +35,6 @@ function steam_gamelist_url($user)
 
 function url_to_simplexml($url)
 {
-print("url == '$url'\n");
     return simplexml_load_file($url, 'SimpleXMLElement', LIBXML_NOCDATA);
 } // url_to_simplexml
 
@@ -68,7 +67,7 @@ function load_steam_profile($user)
     $profile['avatarurl_small'] = (string) $sxe->avatarIcon;
     $profile['avatarurl_medium'] = (string) $sxe->avatarMedium;
     $profile['avatarurl_large'] = (string) $sxe->avatarFull;
-    $profile['vacbanned'] = (string) $sxe->vacBanned;
+    $profile['vacbanned'] = (int) $sxe->vacBanned;
     $profile['membersince'] = (string) $sxe->memberSince;
     $profile['rating'] = (int) $sxe->steamRating;
     $profile['hoursplayed_2weeks'] = (int) $sxe->hoursPlayed2Wk;
@@ -77,7 +76,8 @@ function load_steam_profile($user)
     $profile['realname'] = (string) $sxe->realname;
     $profile['summary'] = (string) $sxe->summary;
     $profile['weblinks'] = array();
-    foreach ($sxe->weblinks as $wl) {
+    foreach ($sxe->weblinks as $wl)
+    {
         $profile['weblinks'][] = array(
             'title' => (string) $wl->weblink->title,
             'url' => (string) $wl->weblink->link
