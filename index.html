@@ -1,0 +1,75 @@
+<!doctype html>
+<html>
+  <head>
+    <script type="text/javascript" src="jquery-1.4.2.min.js"></script>
+    <script type="text/javascript">
+<!--
+function process_steam_profile(xml)
+{
+    var prof = $(xml).find('profile');
+    if (prof.find('valid').text() != '1')
+    {
+        alert("This user's profile is invalid or marked private");
+        return null;
+    } // if
+
+    var retval = {
+        nickname: prof.find('nickname').text(),
+        steamid: prof.find('steamid').text(),
+        name: prof.find('name').text(),
+        profileurl: prof.find('profileurl').text(),
+        onlinestate: prof.find('onlinestate').text(),
+        statemsg: prof.find('statemsg').text(),
+        avatarurl_small: prof.find('avatarurl_small').text(),
+        avatarurl_medium: prof.find('avatarurl_medium').text(),
+        avatarurl_large: prof.find('avatarurl_large').text(),
+        vacbanned: (prof.find('vacbanned').text() != '0'),
+        membersince: prof.find('membersince').text(),
+        rating: prof.find('rating').text(),
+        hoursplayed_2weeks: prof.find('hoursplayed_2weeks').text(),
+        headline: prof.find('headline').text(),
+        location: prof.find('location').text(),
+        realname: prof.find('realname').text(),
+        summary: prof.find('summary').text(),
+        weblinks: new Array(),
+        gamelist: new Array(),
+    }
+
+    prof.find('weblink').each(function(){
+        retval['weblinks'].push({
+            title: $(this).find('title').text(),
+            url: $(this).find('url').text(),
+        });
+    })
+
+    prof.find('game').each(function(){
+        retval['gamelist'].push({
+            appid: $(this).find('appid').text(),
+            title: $(this).find('title').text(),
+            logourl: $(this).find('logourl').text(),
+            storeurl: $(this).find('storeurl').text(),
+        });
+    })
+
+    return retval;
+} // process_steam_profile
+
+
+$(document).ready(function(){
+    var user = 'icculus';  // !!! FIXME
+    $.ajax({
+        type: "GET",
+        url: "steamprofile.php?user=" + user,
+        dataType: "xml",
+        error: function(XMLHttpRequest, textStatus, errorThrown) { alert("error: " + textStatus + " " + errorThrown); },
+        success: function(xml) { alert("loaded"); process_steam_profile(xml); }
+    });
+});
+-->
+    </script>
+  </head>
+  <body>
+    <a href="http://jquery.com/">jQuery</a>
+  </body>
+</html>
+
