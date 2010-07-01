@@ -1,4 +1,5 @@
 <?php
+ob_start('ob_gzhandler');  // compress the XML we send.
 header('Content-type: application/xml; charset=UTF-8');
 
 require_once('steamtags.php');
