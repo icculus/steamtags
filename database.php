@@ -7,6 +7,16 @@ require_once 'dbpass.php';
 
 $dblink = NULL;
 
+function write_error($err)
+{
+    print("\n\n$err\n\n");
+} // write_error
+
+function write_debug($err)
+{
+    //print("\n\n$err\n\n");
+} // write_debug
+
 function get_dblink()
 {
     global $dblink;
