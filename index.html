@@ -4,6 +4,34 @@
     <script type="text/javascript" src="jquery-1.4.2.min.js"></script>
     <script type="text/javascript">
 <!--
+
+var profile = null;
+
+function render()
+{
+    var html =
+        "<img src='" + profile.avatarurl_small + "'/><br/>" +
+        profile.nickname + " (<a href='" + profile.profileurl + "'>" +
+        profile.steamid + "</a>)<br/><table border='0'>"
+
+    var game;
+    for (game in profile.gamelist)
+    {
+        html += "<tr><td><img src='" + game.logourl + "'/>" +
+                "<a href='steam://run/" + game.appid + "'>" + game.title +
+                "</a>";
+
+        var tag;
+        for (tag in game.tags)
+            html += " " + tag;
+        html += "</td></tr>";
+    } // for
+
+    html += "</table>";
+
+    $('div.content').html(html);
+} // render
+
 function process_steam_profile(xml)
 {
     var prof = $(xml).find('profile');
@@ -43,13 +71,20 @@ function process_steam_profile(xml)
     })
 
     prof.find('game').each(function(){
-        retval['gamelist'].push({
+        var game = {
             appid: $(this).find('appid').text(),
             title: $(this).find('title').text(),
             logourl: $(this).find('logourl').text(),
             storeurl: $(this).find('storeurl').text(),
+            tags: new Array,
+        };
+
+        $(this).find('tag').each(function(){
+            game.tags.push($(this).text());
         });
-    })
+
+        retval['gamelist'].push(game);
+    });
 
     return retval;
 } // process_steam_profile
@@ -59,17 +94,23 @@ $(document).ready(function(){
     var user = 'icculus';  // !!! FIXME
     $.ajax({
         type: "GET",
-        url: "steamprofile.php?user=" + user,
+        url: "steamprofdfdfile.php?user=" + user,
         dataType: "xml",
-        error: function(XMLHttpRequest, textStatus, errorThrown) { alert("error: " + textStatus + " " + errorThrown); },
-        success: function(xml) { alert("loaded"); process_steam_profile(xml); }
+        error: function(XMLHttpRequest, textStatus, errorThrown) {
+                    var html = "<center><font color='#FF0000'>" +
+                        "Failed to load Steam profile: " +
+                        textStatus + " " + errorThrown +
+                        "</font></center>";
+                    $('div.content').html(html);
+               },
+        success: function(xml) { profile = process_steam_profile(xml); render(); }
     });
 });
 -->
     </script>
   </head>
   <body>
-    <a href="http://jquery.com/">jQuery</a>
+    <div class='content'><center>Loading your steam profile...</center></div>
   </body>
 </html>
 
