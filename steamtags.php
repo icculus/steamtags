@@ -33,6 +33,21 @@ function url_to_simplexml($url)
     return simplexml_load_file($url, 'SimpleXMLElement', LIBXML_NOCDATA);
 } // url_to_simplexml
 
+function load_profile_game_tags($profile)
+{
+    $gamelist = $profile['gamelist'];
+    $id = $profile['steamid'];
+    $sql = "select appid, tag from gametags where steamid=$id order by appid";
+    $query = do_dbquery($sql);
+    while ( ($row = db_fetch_array($query)) != false )
+    {
+        $game = $gamelist[$row['appid']];
+        if (!isset($game))
+            continue;  // maybe it was a free weekend game they don't own now?
+        $game['tags'][] = $row['tag'];
+    } // while
+} // load_profile_game_tags
+
 function load_steam_profile($user)
 {
     $sxe = url_to_simplexml(steam_profile_url($user));
@@ -93,15 +108,22 @@ function load_steam_profile($user)
 
     foreach ($sxe->games->game as $g)
     {
-        $gamelist[] = array(
+        $gamelist[(int) $g->appID] = array(
             'appid' => (int) $g->appID,
             'title' => (string) $g->name,
             'logourl' => (string) $g->logo,
-            'storeurl' => (string) $g->storeLink
+            'storeurl' => (string) $g->storeLink,
+            'tags' => array(),
         );
     } // foreach
 
     $profile['gamelist'] = $gamelist;
+
+    if (!load_profile_game_tags($profile))
+    {
+        //write_error("Couldn't load user gametags from our database");
+        return NULL;
+    } // if
 
     return $profile;
 } // load_steam_profile
