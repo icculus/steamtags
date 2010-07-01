@@ -9,16 +9,14 @@ var profile = null;
 
 function render()
 {
-    var html =
-        "<img src='" + profile.avatarurl_small + "'/><br/>" +
-        profile.nickname + " (<a href='" + profile.profileurl + "'>" +
-        profile.steamid + "</a>)<br/><table border='0'>"
+    $('img.avatar').attr('src', profile.avatarurl_small);
+    $('div.nickname').text(profile.nickname);
 
     var gameidx;
     for (gameidx in profile.gamelist)
     {
         var game = profile.gamelist[gameidx];
-        html += "<tr><td><img width='189' height='69'src='" + game.logourl + "'/>" +
+        var html = "<tr><td><img width='189' height='69'src='" + game.logourl + "'/>" +
                 "<a href='steam://run/" + game.appid + "'>" + game.title +
                 "</a>";
 
@@ -26,11 +24,8 @@ function render()
         for (tagidx in game.tags)
             html += " " + game.tags[tagidx];
         html += "</td></tr>";
+        $('table.gametable > tbody:last').append(html);
     } // for
-
-    html += "</table>";
-
-    $('div.content').html(html);
 } // render
 
 function process_steam_profile(xml)
@@ -111,7 +106,13 @@ $(document).ready(function(){
     </script>
   </head>
   <body>
-    <div class='content'><center>Loading your steam profile...</center></div>
+    <div style="width:100%;">
+        <img class='avatar' src='loading.gif'/>
+        <div class='nickname'>Loading your steam profile...</div>
+        <div style='width:100%; overflow:auto;'>
+           <table class='gametable'><tbody></tbody></table>
+        </div>
+    </div>
   </body>
 </html>
 
