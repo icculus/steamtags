@@ -1,6 +1,7 @@
 <!doctype html>
 <html>
   <head>
+    <link href="style.css" rel="stylesheet" type="text/css" /> 
     <script type="text/javascript" src="jquery-1.4.2.min.js"></script>
     <script type="text/javascript">
 <!--
@@ -9,21 +10,37 @@ var profile = null;
 
 function render()
 {
-    $('img.avatar').attr('src', profile.avatarurl_small);
+    if (profile == null)
+    {
+        $('div.nickname').text("This user's profile is invalid or marked private");
+        $('img.avatar').hide();
+        return;
+    } // if
+
+    $('img.avatar').attr('src', profile.avatarurl_medium);
     $('div.nickname').text(profile.nickname);
 
     var gameidx;
     for (gameidx in profile.gamelist)
     {
         var game = profile.gamelist[gameidx];
-        var html = "<tr><td><img width='189' height='69'src='" + game.logourl + "'/>" +
-                "<a href='steam://run/" + game.appid + "'>" + game.title +
-                "</a>";
+        var html = "<tr><td class='gamecell'>" +
+                   "<img width='123' height='45' src='" + game.logourl + "'/>" +
+                "<td class='gamecell'>" +
+                "<a href='steam://run/" + game.appid + "'>" + 
+                "<h4>" + game.title + "</h4>" +
+                "</a><p>Tags:";
 
-        var tagidx;
-        for (tagidx in game.tags)
-            html += " " + game.tags[tagidx];
-        html += "</td></tr>";
+        if (game.tags.length == 0)
+            html += ' (none)';
+        else
+        {
+            var tagidx;
+            for (tagidx in game.tags)
+                html += " " + game.tags[tagidx];
+        } // else
+        html += "</p></td></tr>";
+
         $('table.gametable > tbody:last').append(html);
     } // for
 } // render
@@ -32,10 +49,7 @@ function process_steam_profile(xml)
 {
     var prof = $(xml).find('profile');
     if (prof.find('valid').text() != '1')
-    {
-        alert("This user's profile is invalid or marked private");
         return null;
-    } // if
 
     var retval = {
         nickname: prof.find('nickname').text(),
@@ -106,12 +120,10 @@ $(document).ready(function(){
     </script>
   </head>
   <body>
-    <div style="width:100%;">
-        <img class='avatar' src='loading.gif'/>
-        <div class='nickname'>Loading your steam profile...</div>
-        <div style='width:100%; overflow:auto;'>
-           <table class='gametable'><tbody></tbody></table>
-        </div>
+    <div class='main'>
+      <img class='avatar' src='loading.gif'/>
+      <div class='nickname' style='display:inline;'>Loading your steam profile...</div>
+      <table class='gametable'><tbody></tbody></table>
     </div>
   </body>
 </html>

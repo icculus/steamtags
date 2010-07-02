@@ -1,5 +1,5 @@
 <ifmodule mod_deflate.c>
-    AddOutputFilterByType DEFLATE text/text text/html text/plain text/xml text/css application/x-javascript application/javascript application/xml
+    AddOutputFilterByType DEFLATE text/text text/html text/plain text/xml text/css application/x-javascript application/javascript application/xml text/css
 </ifmodule>
 <ifmodule mod_setenvif.c>
     # Netscape 4.x has some problems...
