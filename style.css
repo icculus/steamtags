@@ -68,3 +68,14 @@ td.gamecell {
 	vertical-align: middle;
 }
 
+div.loginpopover {
+    position: absolute;
+    left: 10%;
+    top: 10%;
+    width: 80%;
+    height: 80%;
+    background-color: #ff0000;
+    color: inherit;
+    visibility: hidden;
+}
+

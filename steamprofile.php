@@ -24,11 +24,15 @@ function dump_array_as_xml($name, $a)
 
 
 // mainline...
-if (isset($_REQUEST['user']))
-    $user = $_REQUEST['user'];
 
-if (isset($user))
-    $profile = load_steam_profile($user);
+start_session();
+
+if (!isset($_SESSION['steamid']))
+    print('<profile><steamid>0</steamid></profile>');
+    exit(0);
+}
+
+$profile = load_steam_profile($_SESSION['steamid']);
 
 if ($profile == NULL)
 {

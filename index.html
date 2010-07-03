@@ -48,6 +48,12 @@ function render()
 function process_steam_profile(xml)
 {
     var prof = $(xml).find('profile');
+    if (prof.find('steamid').text() == '0')
+    {
+        $('div.loginpopover').show();
+        return null;
+    } // if
+
     if (prof.find('valid').text() != '1')
         return null;
 
@@ -120,6 +126,15 @@ $(document).ready(function(){
     </script>
   </head>
   <body>
+    <div class='loginpopover'>
+        <center>
+        <p>You need to login to Steam Community to access this page.</p>
+        <p>We are forwarding you to steamcommunity.com.</p>
+        <p>Your password will only be supplied to the Steam website and not
+           to this one.</p>
+        <p><a href='auth.php'>Go there now.</a></p>
+        </center>
+    </div>
     <div class='main'>
       <img class='avatar' src='loading.gif'/>
       <div class='nickname' style='display:inline;'>Loading your steam profile...</div>
