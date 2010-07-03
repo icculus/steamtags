@@ -3,7 +3,7 @@
 header("HTTP/1.0 307 Temporary redirect");
 header('Content-type: text/plain; charset=UTF-8');
 
-start_session();
+session_start();
 
 if (isset($_GET['logout']))
 {
@@ -55,7 +55,7 @@ else
     try
     {
         $openid = new LightOpenID;
-        $okay = openid->validate();
+        $okay = $openid->validate();
     } // try
     catch (ErrorException $e)
     {
