@@ -202,7 +202,7 @@ function typing_in_filter()
     //  list is massive.
     if (run_filter_timer != null)
         clearTimeout(run_filter_timer);
-    run_filter_timer = setTimeout('run_filter();', 1000);
+    run_filter_timer = setTimeout('run_filter();', 50);
 } // typing_in_filter
 
 function process_tag_edit(element)
