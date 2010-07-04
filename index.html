@@ -28,9 +28,9 @@ function render()
                    "<td class='gamecell'>" +
                    "<img width='123' height='45' src='" + game.logourl + "'/>" +
                    "<td class='gamecell'>" +
-                   "<a href='steam://run/" + game.appid + "'>" + 
-                   "<h4>" + game.title + "</h4>" +
-                   "</a><p>Tags:";
+                   "<h4><a href='steam://run/" + game.appid + "'>" + 
+                   game.title + "</a></h4><div class='tagline'>Tags:" +
+                   "<div class='taglist' profilegameidx=" + gameidx + ">";
 
         if (game.tags.length == 0)
             html += ' (none)';
@@ -40,7 +40,7 @@ function render()
             for (tagidx in game.tags)
                 html += " " + game.tags[tagidx];
         } // else
-        html += "</p></td></tr>";
+        html += "</div></div></td></tr>";
 
         $('table.gametable > tbody:last').append(html);
     } // for
@@ -49,6 +49,7 @@ function render()
         profile.gamelist[$(this).attr('profilegameidx')].element = $(this);
     });
 
+    $('div.taglist').one("click", function() { clicked_taglist($(this)); });
 } // render
 
 function process_steam_profile(xml)
@@ -203,6 +204,93 @@ function change_filter_textbox()
     change_filter_timer = setTimeout('run_filter();', 500);
 } // change_filter_textbox
 
+function process_tag_edit(element)
+{
+    var tagstr = element.val().toLowerCase();
+    tagstr = tagstr.replace(/^\s*|\s*$/g, '');
+    tagstr = tagstr.replace(/\s+/g, ' ');
+    tagstr = tagstr.replace(/[^a-z0-9 ]/g, '');
+
+    // remove duplicate tags...
+    var dupetags = tagstr.split(' ');
+    var tags = new Array();
+    for (var i in dupetags)
+    {
+        var dupe = false;
+        for (var j in tags)
+        {
+            if (dupetags[i] == tags[j])
+            {
+                 dupe = true;
+                 break;
+            } // if
+        } // for
+        if (!dupe)
+            tags.push(dupetags[i]);
+    } // for
+    tagstr = tags.join(' ');
+
+    // update profile.gamelist[gameidx].tags and profile.tagmap...
+    var parentdiv = element.parent();
+    var gameidx = parentdiv.attr('profilegameidx');
+    var game = profile.gamelist[gameidx];
+
+    for (var i in game.tags)
+    {
+        var t = game.tags[i];
+        var gamelist = profile.tagmap[t];
+        for (var j = 0; j < gamelist.length; j++)
+        {
+            if (gamelist[j] == game)
+            {
+                gamelist.splice(j, 1);
+                j--;
+            } // if
+        } // for
+        if (gamelist.length == 0)
+            profile.tagmap[t] = null;
+    } // for
+
+    for (var i in tags)
+    {
+        var t = tags[i];
+        if (profile.tagmap[t] == null)
+            profile.tagmap[t] = new Array();
+        profile.tagmap[t].push(game);
+    } // for
+
+    game.tags = tags;
+
+    // !!! FIXME: write me.
+    // Push the updated tags back to the server for storage.
+//        save_tags(gameidx, tagstr);
+
+    // Kill the text input widget, go back to regular text.
+    if (tagstr == '')
+        tagstr = '(none)';
+    parentdiv.html(' ' + tagstr);
+    $('div.taglist').one("click", function() { clicked_taglist($(this)); });
+} // process_tag_edit
+
+function clicked_taglist(element)
+{
+    var editor = $("input.tagedit");
+    if (editor)
+        editor.blur();  // that should kill it.
+
+    var tagstr = element.text().replace(/^\s*|\s*$/g, '');
+    if (tagstr == '(none)')
+        tagstr = '';
+
+    var html = "<input class='tagedit' name='tagedit' type='text'" +
+                 "value='" + tagstr + "' autocomplete='off'/>";
+    element.html(html);
+
+    editor = $("input.tagedit");
+    editor.blur(function() { process_tag_edit($(this)); });
+    editor.change(function() { process_tag_edit($(this)); });
+    editor.focus();
+} // clicked_taglist
 
 // kick off AJAX load of user profile when document is ready for action.
 $(document).ready(function(){
