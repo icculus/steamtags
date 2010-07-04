@@ -332,6 +332,7 @@ $(document).ready(function(){
         <div class='searchbox'> 
           <input class='tagfilter' name='filter' type='text'
                  onFocus='focus_filter_textbox();' 
+                 onBlur='run_filter();'
                  onChange='run_filter();' 
                  onKeyDown='typing_in_filter();' 
                  value='Enter filter tags' size='22' autocomplete='off'/>
