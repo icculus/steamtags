@@ -107,10 +107,10 @@ function process_steam_profile(xml)
 
 
 $(document).ready(function(){
-    var user = 'icculus';  // !!! FIXME
+return;
     $.ajax({
         type: "GET",
-        url: "steamprofile.php?user=" + user,
+        url: "steamprofile.php",
         dataType: "xml",
         error: function(XMLHttpRequest, textStatus, errorThrown) {
                     var html = "<center><font color='#FF0000'>" +
@@ -122,6 +122,17 @@ $(document).ready(function(){
         success: function(xml) { profile = process_steam_profile(xml); render(); }
     });
 });
+
+function clear_filter_textbox()
+{
+    var widget = $('input.tagfilter');
+    if (widget && !widget.attr('filter_cleared'))
+    {
+        widget.attr('filter_cleared', true);
+        widget.val('');
+    } // if
+} // clear_filter_textbox
+
 -->
     </script>
   </head>
@@ -136,8 +147,15 @@ $(document).ready(function(){
         </center>
     </div>
     <div class='main'>
-      <img class='avatar' src='loading.gif'/>
-      <div class='nickname' style='display:inline;'>Loading your steam profile...</div>
+      <div id="global_header"> 
+        <img class='avatar' src='loading.gif'/>
+        <div class='nickname'>Loading your steam profile...</div>
+        <div class='searchbox'> 
+          <input class='tagfilter' name='filter' type='text'
+                 onFocus='clear_filter_textbox();' 
+                 value='Enter filter tags' size='22' autocomplete='off'/>
+        </div>
+    </div>
       <table class='gametable'><tbody></tbody></table>
     </div>
   </body>

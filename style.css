@@ -58,6 +58,19 @@ h5 {
 	text-transform: uppercase;
 }
 
+div#global_header {
+	background-image: url(globalheader_bg.jpg);
+	background-color: #000000;
+	border-bottom: 1px solid #4D4B48;
+	background-position: center top;
+}
+
+div.nickname {
+	display: inline;
+	font-size: 30px;
+	font-weight: normal;
+}
+
 div.main {
 	background-image: url(content_bg.png);
 	background-repeat: repeat-x;
@@ -66,6 +79,10 @@ div.main {
 
 td.gamecell {
 	vertical-align: middle;
+}
+
+img.avatar {
+	padding: 3px;
 }
 
 div.loginpopover {
@@ -77,5 +94,29 @@ div.loginpopover {
     background-color: #ff0000;
     color: inherit;
     visibility: hidden;
+}
+
+.searchbox {
+	background-image: url(store_header_search.png);
+	float: right;
+	color: #a6a5a2;
+	width: 253px;
+	height: 27px;
+	position: relative;
+	z-index: 250;
+}
+
+.searchbox input {
+	border: none;
+	background-color: #4a4746;
+	color: #cdc9c0;
+	margin-top: 5px;
+	margin-left: 8px;
+	width: 206px;
+	outline: none;
+}
+
+.searchbox input.default {
+	font-style: italic;
 }
 
