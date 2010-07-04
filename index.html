@@ -24,12 +24,13 @@ function render()
     for (gameidx in profile.gamelist)
     {
         var game = profile.gamelist[gameidx];
-        var html = "<tr><td class='gamecell'>" +
+        var html = "<tr class='gamerow' profilegameidx='" + gameidx + "'>" +
+                   "<td class='gamecell'>" +
                    "<img width='123' height='45' src='" + game.logourl + "'/>" +
-                "<td class='gamecell'>" +
-                "<a href='steam://run/" + game.appid + "'>" + 
-                "<h4>" + game.title + "</h4>" +
-                "</a><p>Tags:";
+                   "<td class='gamecell'>" +
+                   "<a href='steam://run/" + game.appid + "'>" + 
+                   "<h4>" + game.title + "</h4>" +
+                   "</a><p>Tags:";
 
         if (game.tags.length == 0)
             html += ' (none)';
@@ -43,6 +44,11 @@ function render()
 
         $('table.gametable > tbody:last').append(html);
     } // for
+
+    $('tr.gamerow').each(function() {
+        profile.gamelist[$(this).attr('profilegameidx')].element = $(this);
+    });
+
 } // render
 
 function process_steam_profile(xml)
@@ -77,6 +83,8 @@ function process_steam_profile(xml)
         summary: prof.find('summary').text(),
         weblinks: new Array(),
         gamelist: new Array(),
+        filter: '',
+        tagmap: new Object(),
     }
 
     prof.find('weblink').each(function(){
@@ -92,11 +100,17 @@ function process_steam_profile(xml)
             title: $(this).find('title').text(),
             logourl: $(this).find('logourl').text(),
             storeurl: $(this).find('storeurl').text(),
+            filtered: true,
+            element: null,
             tags: new Array,
         };
 
         $(this).find('tag').each(function(){
-            game.tags.push($(this).text());
+            var t = $(this).text().toLowerCase();
+            game.tags.push(t);
+            if (retval.tagmap[t] == null)
+                retval.tagmap[t] = new Array();
+            retval.tagmap[t].push(game);
         });
 
         retval['gamelist'].push(game);
@@ -105,33 +119,110 @@ function process_steam_profile(xml)
     return retval;
 } // process_steam_profile
 
-
-$(document).ready(function(){
-return;
-    $.ajax({
-        type: "GET",
-        url: "steamprofile.php",
-        dataType: "xml",
-        error: function(XMLHttpRequest, textStatus, errorThrown) {
-                    var html = "<center><font color='#FF0000'>" +
-                        "Failed to load Steam profile: " +
-                        textStatus + " " + errorThrown +
-                        "</font></center>";
-                    $('div.content').html(html);
-               },
-        success: function(xml) { profile = process_steam_profile(xml); render(); }
-    });
-});
-
-function clear_filter_textbox()
+var change_filter_timer = null;
+function run_filter()
 {
+    // stop any pending filter runs.
+    clearTimeout(change_filter_timer);
+    change_filter_timer = null;
+
+    var filter = '';
+    var widget = $('input.tagfilter');
+
+    // ignore text in box if we haven't focused it yet.
+    if (widget && widget.attr('filter_cleared'))
+        filter = widget.val();
+
+    filter = filter.toLowerCase();
+
+    if (profile.filter == filter)
+        return;  // fast path: nothing's changed.
+
+    profile.filter = filter;
+
+    // fast path: can we just show everything?
+    if (filter == '')   // just show everything.
+    {
+        $('tr.gamerow').show();
+        return;
+    } // if
+
+    var filtertags = filter.split(' ');
+
+    for (var t in filtertags)
+    {
+        // fast path: can we just hide everything?
+        if (profile.tagmap[filtertags[t]] == null)
+        {
+            $('tr.gamerow').hide();   // no rows match this tag.
+            return;
+        } // if
+    } // for
+
+    for (var t in filtertags)
+    {
+        var tag = filtertags[t];
+        for (var i in profile.tagmap[tag])
+        {
+            var game = profile.tagmap[tag][i];
+            game.filtered = false;
+        } // for
+    } // for
+
+    // okay, now we have a list of games that should be filtered.
+    for (var i in profile.gamelist)
+    {
+        var game = profile.gamelist[i];
+        if (game.filtered)
+            game.element.hide();
+        else
+        {
+            game.element.show();
+            game.filtered = true;   // reset this for next time.
+        } // else
+    } // for
+} // run_filter
+
+function focus_filter_textbox()
+{
+    // blank out the filter textbox when focused if it has default text.
     var widget = $('input.tagfilter');
     if (widget && !widget.attr('filter_cleared'))
     {
         widget.attr('filter_cleared', true);
         widget.val('');
     } // if
-} // clear_filter_textbox
+} // focus_filter_textbox
+
+function change_filter_textbox()
+{
+    // we only update the filter when it's been more than X ms, in case the
+    //  list is massive.
+    if (change_filter_timer != null)
+        clearTimeout(change_filter_timer);
+    change_filter_timer = setTimeout('run_filter();', 500);
+} // change_filter_textbox
+
+
+// kick off AJAX load of user profile when document is ready for action.
+$(document).ready(function(){
+    $.ajax({
+        type: "GET",
+        url: "steamprofile.php",
+        dataType: "xml",
+        error: function(XMLHttpRequest, textStatus, errorThrown) {
+            var html = "<center><font color='#FF0000'>" +
+                       "Failed to load Steam profile: " +
+                       textStatus + " " + errorThrown +
+                       "</font></center>";
+            $('div.content').html(html);
+        },
+        success: function(xml) {
+            profile = process_steam_profile(xml);
+            render();
+        },
+    });
+});
 
 -->
     </script>
@@ -152,7 +243,9 @@ function clear_filter_textbox()
         <div class='nickname'>Loading your steam profile...</div>
         <div class='searchbox'> 
           <input class='tagfilter' name='filter' type='text'
-                 onFocus='clear_filter_textbox();' 
+                 onFocus='focus_filter_textbox();' 
+                 onChange='change_filter_textbox();' 
+                 onKeyDown='change_filter_textbox();' 
                  value='Enter filter tags' size='22' autocomplete='off'/>
         </div>
     </div>
