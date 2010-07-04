@@ -135,6 +135,7 @@ function run_filter()
         filter = widget.val();
 
     filter = filter.toLowerCase();
+    filter = filter.replace(/^\s*|\s*$/g, '');
 
     if (profile.filter == filter)
         return;  // fast path: nothing's changed.
