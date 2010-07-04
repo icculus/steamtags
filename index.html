@@ -208,7 +208,7 @@ function typing_in_filter()
 function save_tags(appid, tagstr)
 {
     // we only allow a-z, 0-9, and spaces. So URI encode the spaces.
-    tagstrurl = tagstr.replace(/ /g. '%20');
+    var tagstrurl = tagstr.replace(/ /g, '%20');
     $.ajax({
         type: 'GET',
         url: 'savetags.php?appid=' + appid + '&tags=' + tagstrurl,
