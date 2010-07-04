@@ -205,6 +205,38 @@ function typing_in_filter()
     run_filter_timer = setTimeout('run_filter();', 50);
 } // typing_in_filter
 
+function save_tags(appid, tagstr)
+{
+    // we only allow a-z, 0-9, and spaces. So URI encode the spaces.
+    tagstrurl = tagstr.replace(/ /g. '%20');
+    $.ajax({
+        type: 'GET',
+        url: 'savetags.php?appid=' + appid + '&tags=' + tagstrurl,
+        dataType: "xml",
+        success: function(xml) {
+            // !!! FIXME: we leave the tags dead if this fails for any reason.
+            var resxml = $(xml).find('result');
+            if ((resxml == null) || (resxml.text() != '1'))
+                return;
+
+            var appidxml = $(xml).find('appid');
+            if (appidxml == null)
+                return;
+
+            var game = profile.gamelist[appidxml.text()];
+            if (game == null)
+                return;
+
+            var element = game.element.find('div.taglist');
+            if (element == null)
+                return;
+
+            element.css('color', '#FFFFFF');
+            element.one("click", function() { clicked_taglist($(this)); });
+        },
+    });
+} // save_tags
+
 function process_tag_edit(element)
 {
     var tagstr = element.val().toLowerCase();
@@ -262,15 +294,14 @@ function process_tag_edit(element)
 
     game.tags = tags;
 
-    // !!! FIXME: write me.
     // Push the updated tags back to the server for storage.
-//        save_tags(gameidx, tagstr);
+    save_tags(game.appid, tagstr);
 
     // Kill the text input widget, go back to regular text.
     if (tagstr == '')
         tagstr = '(none)';
     parentdiv.html(' ' + tagstr);
-    $('div.taglist').one("click", function() { clicked_taglist($(this)); });
+    parentdiv.css('color', '#777777');
 } // process_tag_edit
 
 function clicked_taglist(element)
