@@ -120,12 +120,12 @@ function process_steam_profile(xml)
     return retval;
 } // process_steam_profile
 
-var change_filter_timer = null;
+var run_filter_timer = null;
 function run_filter()
 {
     // stop any pending filter runs.
-    clearTimeout(change_filter_timer);
-    change_filter_timer = null;
+    clearTimeout(run_filter_timer);
+    run_filter_timer = null;
 
     var filter = '';
     var widget = $('input.tagfilter');
@@ -195,14 +195,14 @@ function focus_filter_textbox()
     } // if
 } // focus_filter_textbox
 
-function change_filter_textbox()
+function typing_in_filter()
 {
     // we only update the filter when it's been more than X ms, in case the
     //  list is massive.
-    if (change_filter_timer != null)
-        clearTimeout(change_filter_timer);
-    change_filter_timer = setTimeout('run_filter();', 500);
-} // change_filter_textbox
+    if (run_filter_timer != null)
+        clearTimeout(run_filter_timer);
+    run_filter_timer = setTimeout('run_filter();', 1000);
+} // typing_in_filter
 
 function process_tag_edit(element)
 {
@@ -332,8 +332,8 @@ $(document).ready(function(){
         <div class='searchbox'> 
           <input class='tagfilter' name='filter' type='text'
                  onFocus='focus_filter_textbox();' 
-                 onChange='change_filter_textbox();' 
-                 onKeyDown='change_filter_textbox();' 
+                 onChange='run_filter();' 
+                 onKeyDown='typing_in_filter();' 
                  value='Enter filter tags' size='22' autocomplete='off'/>
         </div>
     </div>
