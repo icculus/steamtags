@@ -34,7 +34,11 @@ do_dbquery(
         " steamid bigint not null," .
         " appid int unsigned not null," .
         " tag varchar(64) not null," .
-        " index steamid_index (steamid)," .
+        " ipaddr unsigned int not null," .
+        " posted datetime not null," .
+        " deleted datetime default null," .
+        " deletedipaddr unsigned int default null," .
+        " index gametag_index (steamid, appid)," .
         " primary key (id)" .
     " ) character set utf8"
 );

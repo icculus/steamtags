@@ -6,7 +6,7 @@ function steam_base_profile_url($user)
 {
     $profdir = 'profiles';
 
-    if (preg_match('/^[0-9]+$/i', $user))
+    if (preg_match('/^[0-9]+$/', $user))
     {
         $basedir = $profdir;
         $id = $user;
@@ -39,7 +39,8 @@ function load_profile_game_tags($profile)
 {
     $gamelist = $profile['gamelist'];
     $id = $profile['steamid'];
-    $sql = "select appid, tag from gametags where steamid=$id order by appid";
+    $sql = "select appid, tag from gametags where steamid=$id" .
+           " and deleted is null order by appid";
     $query = do_dbquery($sql);
     // !!! FIXME: check for db error here!
     while ( ($row = db_fetch_array($query)) != false )
