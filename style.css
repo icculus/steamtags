@@ -133,6 +133,10 @@ img.avatar {
 	-webkit-border-radius: 10px;
 }
 
+.popover a {
+	text-decoration: underline;
+}
+
 div.taglist {
    display: inline;
 }
