@@ -158,9 +158,12 @@ div.taglist {
    display: inline;
 }
 
+.controls {
+	float: right;
+}
+
 .searchbox {
 	background-image: url(store_header_search.png);
-	float: right;
 	color: #a6a5a2;
 	width: 253px;
 	height: 27px;
@@ -189,9 +192,5 @@ div.taglist {
 	color: #cdc9c0;
 	outline: none;
 	margin-left: 5px;
-}
-
-.scrollable {
-	overflow: auto;
 }
 

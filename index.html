@@ -413,30 +413,30 @@ $(document).ready(function(){
       <div class="global_header"> 
         <img class='avatar' width='64' height='64' src='loading.gif'/>
         <div class='nickname'></div>
-        <div class='searchbox'> 
-          <input class='tagfilter' name='filter' type='text'
-                 onFocus='focus_filter_textbox();' 
-                 onBlur='run_filter();'
-                 onChange='run_filter();' 
-                 onKeyDown='typing_in_filter();' 
-                 value='Enter filter tags' size='22' autocomplete='off'/>
+        <div class='controls'>
+          <div class='searchbox'> 
+            <input class='tagfilter' name='filter' type='text'
+                   onFocus='focus_filter_textbox();' 
+                   onBlur='run_filter();'
+                   onChange='run_filter();' 
+                   onKeyDown='typing_in_filter();' 
+                   value='Enter filter tags' size='22' autocomplete='off'/>
+          </div>
+          <div class='navbar'>
+            [
+            <a target='_blank' href='http://store.steampowered.com/'>buy games</a>
+            -
+            <a target='_blank' href='http://hg.icculus.org/icculus/steamtags'>source code</a>
+            -
+            <a target='_blank' id='profileurl' href='xxx'>profile</a>
+            -
+            <a href='auth.php?logout=1'>logout</a>
+            ]
+          </div>
         </div>
       </div>
-      <div class='scrollable'>
-        <table class='gametable'><tbody></tbody></table>
-      </div>
-      <div class='global_footer'>
-      <center>
-        [
-        <a target='_blank' href='http://store.steampowered.com/'>buy games</a>
-        -
-        <a target='_blank' href='http://hg.icculus.org/icculus/steamtags'>source code</a>
-        -
-        <a target='_blank' id='profileurl' href='xxx'>profile</a>
-        -
-        <a href='auth.php?logout=1'>logout</a>
-        ]
-      </div>
+      <table class='gametable'><tbody></tbody></table>
+      <div class="global_footer"></div> 
     </div>
 
     <div id='loadingmessage'>
