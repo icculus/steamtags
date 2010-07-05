@@ -57,6 +57,7 @@ function render()
 
     $('div.taglist').one("click", function() { clicked_taglist($(this)); });
     $('div.searchbox').css('visibility', 'visible');
+    $('a#profileurl').attr('href', profile.profileurl);
     resize_ui();
 } // render
 
@@ -431,6 +432,8 @@ $(document).ready(function(){
         <a target='_blank' href='http://store.steampowered.com/'>buy games</a>
         -
         <a target='_blank' href='http://hg.icculus.org/icculus/steamtags'>source code</a>
+        -
+        <a target='_blank' id='profileurl' href='xxx'>profile</a>
         -
         <a href='auth.php?logout=1'>logout</a>
         ]
