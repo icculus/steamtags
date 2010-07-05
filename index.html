@@ -9,6 +9,15 @@
 
 var profile = null;
 
+// !!! FIXME: this is kinda nasty.
+function resize_ui()
+{
+    var h = $(window).height();
+    h -= $('div.global_header').height();
+    h -= $('div.global_footer').height();
+    $('div.scrollable').height(h - 10);
+} // resize_ui
+
 function render()
 {
     if (profile == null)
@@ -52,6 +61,7 @@ function render()
 
     $('div.taglist').one("click", function() { clicked_taglist($(this)); });
     $('div.searchbox').css('visibility', 'visible');
+    resize_ui();
 } // render
 
 function process_steam_profile(xml)
@@ -349,6 +359,7 @@ function clicked_taglist(element)
 
 // kick off AJAX load of user profile when document is ready for action.
 $(document).ready(function(){
+    $(window).resize( function() { resize_ui(); } );
     $.ajax({
         type: "GET",
         url: "steamprofile.php",
@@ -392,6 +403,20 @@ $(document).ready(function(){
                  onKeyDown='typing_in_filter();' 
                  value='Enter filter tags' size='22' autocomplete='off'/>
         </div>
+      </div>
+      <div class='scrollable'>
+        <table class='gametable'><tbody></tbody></table>
+      </div>
+      <div class='global_footer'>
+      <center>
+        [
+        <a target='_blank' href='http://store.steampowered.com/'>buy games</a>
+        -
+        <a target='_blank' href='http://hg.icculus.org/icculus/steamtags'>source code</a>
+        -
+        <a href='auth.php?logout=1'>logout</a>
+        ]
+      </div>
     </div>
       <table class='gametable'><tbody></tbody></table>
     </div>

@@ -58,11 +58,16 @@ h5 {
 	text-transform: uppercase;
 }
 
-div#global_header {
+div.global_header {
 	background-image: url(globalheader_bg.jpg);
 	background-color: #000000;
 	border-bottom: 1px solid #4D4B48;
 	background-position: center top;
+}
+
+div.global_footer {
+	background-color: #000000;
+	border-top: 1px solid #4D4B48;
 }
 
 div.nickname {
@@ -132,3 +137,8 @@ div.taglist {
 	outline: none;
 	margin-left: 5px;
 }
+
+.scrollable {
+	overflow: auto;
+}
+
