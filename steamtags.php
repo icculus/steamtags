@@ -56,7 +56,7 @@ function load_profile_game_tags(&$profile)
     return true;
 } // load_profile_game_tags
 
-function load_steam_profile($user)
+function load_steam_profile($user, &$isprivate)
 {
     $sxe = url_to_simplexml(steam_profile_url($user));
     if ($sxe === false)
@@ -65,7 +65,8 @@ function load_steam_profile($user)
         return NULL;
     } // if
 
-    if ($sxe->privacyState != 'public')
+    $isprivate = ($sxe->privacyState != 'public');
+    if ($isprivate)
     {
         //write_error("This user's profile is marked private");
         return NULL;
@@ -77,6 +78,7 @@ function load_steam_profile($user)
 
     $profile = array();
     $profile['valid'] = 1;
+    $profile['private'] = 0;
     $profile['nickname'] = (string) $sxe->steamID;
     $profile['steamid'] = (string) $steamid64;
     $profile['name'] = $scid;

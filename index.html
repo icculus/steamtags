@@ -101,7 +101,13 @@ function process_steam_profile(xml)
         return null;
     } // if
 
-    if (prof.find('valid').text() != '1')
+    if (prof.find('valid').text() == '0')
+    {
+        popover('#loginfailurepopover');
+        return null;
+    } // if
+
+    if (prof.find('private').text() == '1')
     {
         var url = 'http://steamcommunity.com/profiles/' + steamid + '/edit/settings';
         $('a#privpage').attr('href', url);

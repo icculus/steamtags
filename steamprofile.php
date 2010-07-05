@@ -47,9 +47,14 @@ if (!isset($_SESSION['steamid']))
 } // if
 
 $steamid = $_SESSION['steamid'];
-$profile = load_steam_profile($steamid);
+$profile = load_steam_profile($steamid, $isprivate);
 
-if ($profile == NULL)
+if ($isprivate)
+{
+    print("<profile><steamid>$steamid</steamid><valid>1</valid><private>1</private></profile>");
+    exit(0);
+} // if
+else if ($profile == NULL)
 {
     print("<profile><steamid>$steamid</steamid><valid>0</valid></profile>");
     exit(0);
