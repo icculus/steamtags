@@ -168,6 +168,12 @@ function process_steam_profile(xml)
         retval['gamelist'].push(game);
     });
 
+    if (retval['gamelist'].length == 0)
+    {
+        popover('#noappspopover');
+        return null;        
+    } // if
+
     return retval;
 } // process_steam_profile
 
@@ -451,7 +457,7 @@ $(document).ready(function(){
         </center>
     </div>
 
-    <div id='loginpopover'>
+    <div class='popover' id='loginpopover'>
         <center>
         <p>This website lets you organize and filter your Steam purchases
            through tags you choose. You can categorize and file your games
@@ -466,7 +472,7 @@ $(document).ready(function(){
         </center>
     </div>
 
-    <div id='loginfailurepopover'>
+    <div class='popover' id='loginfailurepopover'>
         <center>
         <p>We're having trouble accessing your Steam Community profile.</p>
         <br/>
@@ -479,7 +485,7 @@ $(document).ready(function(){
         </center>
     </div>
 
-    <div id='privateprofilepopover'>
+    <div class='popover' id='privateprofilepopover'>
       <center>
         <p>Your Steam Community profile appears to be set to private.</p>
         <br/>
@@ -491,6 +497,18 @@ $(document).ready(function(){
         <p><a id='privpage' style='text-decoration: underline;' href='xxx'>
           Click here to go to your steamcommunity.com settings.</a></p>
       </center>
+    </div>
+
+    <div class='popover' id='noappspopover'>
+        <center>
+        <p>You don't seem to own any games!</p>
+        <br/>
+        <p>This website isn't very useful if you don't have something to
+           organize.</p>
+        <br/>
+        <p><a style='text-decoration: underline;' href='http://store.steampowered.com'>
+          Click here to go shopping!</a></p>
+        </center>
     </div>
 
     <div id='backgroundpopover'></div>

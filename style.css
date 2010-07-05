@@ -119,39 +119,10 @@ img.avatar {
 	-webkit-border-radius: 10px;
 }
 
-#loginpopover {
+.popover {
 	display:none;
 	position:fixed;
 	_position:absolute; /* hack for internet explorer 6*/
-	background:#FF0000;
-	color:#FFFFFF;
-	border:2px solid #cecece;
-	z-index:2;
-	padding:12px;
-	font-size:13px;
-	-moz-border-radius: 10px;
-	-webkit-border-radius: 10px;
-}
-
-#loginfailurepopover {
-	display:none;
-	position:fixed;
-	_position:absolute; /* hack for internet explorer 6*/
-	background:#FF0000;
-	color:#FFFFFF;
-	border:2px solid #cecece;
-	z-index:2;
-	padding:12px;
-	font-size:13px;
-	-moz-border-radius: 10px;
-	-webkit-border-radius: 10px;
-}
-
-#privateprofilepopover {
-	display:none;
-	position:fixed;
-	_position:absolute; /* hack for internet explorer 6*/
-	width:408px;
 	background:#FF0000;
 	color:#FFFFFF;
 	border:2px solid #cecece;
