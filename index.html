@@ -223,7 +223,18 @@ function save_tags(appid, tagstr)
             if (appidxml == null)
                 return;
 
-            var game = profile.gamelist[appidxml.text()];
+            // !!! FIXME: we can just upvalue here, right? Why iterate?
+            var appid = appidxml.text();
+            var game = null;
+            for (var i in profile.gamelist)
+            {
+                if (profile.gamelist[i].appid == appid)
+                {
+                    game = profile.gamelist[i];
+                    break;
+                } // if
+            } // for
+
             if (game == null)
                 return;
 
