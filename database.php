@@ -3,7 +3,7 @@
 // This file adds a little bit of a wrapper over MySQL, and a little
 //  bit of convenience functionality.
 
-require_once 'dbpass.php';
+require_once 'localcfg.php';
 
 $GDebugSQL = false;
 $GDebugSQLErrors = true;

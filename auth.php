@@ -3,6 +3,8 @@
 header("HTTP/1.0 307 Temporary redirect");
 header('Content-type: text/plain; charset=UTF-8');
 
+require_once('localcfg.php');
+
 session_start();
 
 if (isset($_GET['logout']))
@@ -15,6 +17,13 @@ if (isset($_GET['logout']))
     print("You'll have to log in to use this site again.\n\n");
     exit(0);
 } // if
+
+// This is set in localcfg.php.
+if ($GAllowForceAuth)
+{
+    if (isset($_GET['force']))
+        $_SESSION['steamid'] = $_GET['force'];
+} //if
 
 if (isset($_SESSION['steamid']))
 {
