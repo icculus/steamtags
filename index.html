@@ -247,9 +247,9 @@ function save_tags(appid, tagstr)
     });
 } // save_tags
 
-function process_tag_edit(element)
+function process_tag_edit(element, tagstr)
 {
-    var tagstr = element.val().toLowerCase();
+    tagstr = tagstr.toLowerCase();
     tagstr = tagstr.replace(/^\s*|\s*$/g, '');
     tagstr = tagstr.replace(/\s+/g, ' ');
     tagstr = tagstr.replace(/[^a-z0-9 ]/g, '');
@@ -326,12 +326,22 @@ function clicked_taglist(element)
         tagstr = '';
 
     var html = "<input class='tagedit' name='tagedit' type='text'" +
-                 "value='" + tagstr + "' autocomplete='off'/>";
+               "value='" + tagstr + "' autocomplete='off'/>";
     element.html(html);
 
     editor = $("input.tagedit");
-    editor.blur(function() { process_tag_edit($(this)); });
-    editor.change(function() { process_tag_edit($(this)); });
+    editor.blur(function() { process_tag_edit($(this), $(this).val()); });
+    editor.change(function() { process_tag_edit($(this), $(this).val()); });
+    editor.keyup(function(e) {
+        if (e.keyCode != 27)
+            return;
+        // revert to original tags on escape.
+        var parentdiv = $(this).parent();
+        var gameidx = parentdiv.attr('profilegameidx');
+        var game = profile.gamelist[gameidx];
+        var tagstr = game.tags.join(' ');
+        process_tag_edit($(this), tagstr);
+    });
     editor.focus();
 } // clicked_taglist
 
