@@ -48,16 +48,6 @@ function popover(element)
     $(element).fadeIn('slow');
 } // popover
 
-
-// !!! FIXME: this is kinda nasty.
-function resize_ui()
-{
-    var h = $(window).height();
-    h -= $('div.global_header').height();
-    h -= $('div.global_footer').height();
-    $('div.scrollable').height(h - 10);
-} // resize_ui
-
 function render()
 {
     if (profile == null)
@@ -97,8 +87,6 @@ function render()
 
     $('div.taglist').one("click", function() { clicked_taglist($(this)); });
     $('a#profileurl').attr('href', profile.profileurl);
-    resize_ui();
-
     $('div.main').show();
     end_popover();
 } // render
@@ -404,7 +392,6 @@ function clicked_taglist(element)
 
 // kick off AJAX load of user profile when document is ready for action.
 $(document).ready(function(){
-    $(window).resize( function() { resize_ui(); } );
     popover('#loadingmessage');
     $.ajax({
         type: "GET",

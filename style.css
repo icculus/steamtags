@@ -121,7 +121,6 @@ img.avatar {
 	display:none;
 	position:fixed;
 	_position:absolute; /* hack for internet explorer 6*/
-	width:408px;
 	background:#FF0000;
 	color:#FFFFFF;
 	border:2px solid #cecece;
