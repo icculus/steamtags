@@ -21,11 +21,7 @@ function resize_ui()
 function render()
 {
     if (profile == null)
-    {
-        $('div.nickname').text("This user's profile is invalid or marked private");
-        $('img.avatar').hide();
         return;
-    } // if
 
     $('img.avatar').attr('src', profile.avatarurl_medium);
     $('div.nickname').text(profile.nickname);
@@ -64,12 +60,36 @@ function render()
     resize_ui();
 } // render
 
+function popover(element)
+{
+    var windowWidth = document.documentElement.clientWidth;
+    var windowHeight = document.documentElement.clientHeight;
+    var popupWidth = windowWidth / 2;
+    $(element).css('width', popupWidth);
+
+    var popupHeight = $(element).height();
+
+    $(element).css({
+        position: 'absolute',
+        top: (windowHeight - popupHeight) / 2,
+        left: (windowWidth - popupWidth) / 2,
+        width: popupWidth,
+        height: popupHeight,
+    });
+
+    $('#backgroundpopover').css('height', windowHeight);
+    $("#backgroundpopover").css('opacity', '0.7');
+    $("#backgroundpopover").fadeIn('slow');
+    $(element).fadeIn('slow');
+} // popover
+
 function process_steam_profile(xml)
 {
     var prof = $(xml).find('profile');
     if (prof.find('steamid').text() == '0')
     {
-        $('div.loginpopover').show();
+        $('img.avatar').hide();
+        popover('#loginpopover');
         return null;
     } // if
 
@@ -382,19 +402,10 @@ $(document).ready(function(){
     </script>
   </head>
   <body>
-    <div class='loginpopover'>
-        <center>
-        <p>You need to login to Steam Community to access this page.</p>
-        <p>We are forwarding you to steamcommunity.com.</p>
-        <p>Your password will only be supplied to the Steam website and not
-           to this one.</p>
-        <p><a href='auth.php'>Go there now.</a></p>
-        </center>
-    </div>
     <div class='main'>
-      <div id="global_header"> 
-        <img class='avatar' src='loading.gif'/>
-        <div class='nickname'>Loading your steam profile...</div>
+      <div class="global_header"> 
+        <img class='avatar' width='64' height='64' src='loading.gif'/>
+        <div class='nickname'></div>
         <div class='searchbox' style='visibility: hidden;'> 
           <input class='tagfilter' name='filter' type='text'
                  onFocus='focus_filter_textbox();' 
@@ -418,8 +429,21 @@ $(document).ready(function(){
         ]
       </div>
     </div>
-      <table class='gametable'><tbody></tbody></table>
+
+    <div id='loginpopover'>
+        <center>
+        <p>This website lets you organize and filter your Steam purchases
+           through tags.</p>
+        <br/>
+        <p>You need to log in to Steam Community to access this page.</p>
+        <p>Your password will only be supplied to the Steam website. This
+           website will never have access to your login information.</p>
+        <br/>
+        <p><a style='text-decoration: underline;' href='auth.php'>
+          Click here to log in through steamcommunity.com</a></p>
+        </center>
     </div>
+    <div id='backgroundpopover'></div>
   </body>
 </html>
 

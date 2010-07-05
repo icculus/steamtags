@@ -90,15 +90,30 @@ img.avatar {
 	padding: 3px;
 }
 
-div.loginpopover {
-    position: absolute;
-    left: 10%;
-    top: 10%;
-    width: 80%;
-    height: 80%;
-    background-color: #ff0000;
-    color: inherit;
-    visibility: hidden;
+#backgroundpopover {  
+	display:none;
+	position:fixed;
+	_position:absolute; /* hack for internet explorer 6*/
+	height:100%;
+	width:100%;
+	top:0;
+	left:0;
+	background:#000000;
+	border:1px solid #cecece;
+	z-index:1;
+}  
+
+#loginpopover {
+	display:none;
+	position:fixed;
+	_position:absolute; /* hack for internet explorer 6*/
+	width:408px;
+	background:#FF0000;
+	color:#FFFFFF;
+	border:2px solid #cecece;
+	z-index:2;
+	padding:12px;
+	font-size:13px;
 }
 
 div.taglist {
