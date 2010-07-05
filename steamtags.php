@@ -35,9 +35,9 @@ function url_to_simplexml($url)
     return simplexml_load_file($url, 'SimpleXMLElement', LIBXML_NOCDATA);
 } // url_to_simplexml
 
-function load_profile_game_tags($profile)
+function load_profile_game_tags(&$profile)
 {
-    $gamelist = $profile['gamelist'];
+    $gamelist = &$profile['gamelist'];
     $id = $profile['steamid'];
     $sql = "select appid, tag from gametags where steamid=$id" .
            " and deleted is null order by appid";
@@ -47,10 +47,9 @@ function load_profile_game_tags($profile)
 
     while ( ($row = db_fetch_array($query)) != false )
     {
-        $game = $gamelist[$row['appid']];
-        if (!isset($game))
+        if (!isset($gamelist[$row['appid']]))
             continue;  // maybe it was a free weekend game they don't own now?
-        $game['tags'][] = $row['tag'];
+        $gamelist[$row['appid']]['tags'][] = $row['tag'];
     } // while
 
     db_free_result($query);
@@ -126,7 +125,7 @@ function load_steam_profile($user)
         );
     } // foreach
 
-    $profile['gamelist'] = $gamelist;
+    $profile['gamelist'] = &$gamelist;
 
     if (!load_profile_game_tags($profile))
     {
