@@ -397,13 +397,7 @@ $(document).ready(function(){
         type: "GET",
         url: "steamprofile.php",
         dataType: "xml",
-        error: function(XMLHttpRequest, textStatus, errorThrown) {
-            var html = "<center><font color='#FF0000'>" +
-                       "Failed to load Steam profile: " +
-                       textStatus + " " + errorThrown +
-                       "</font></center>";
-            $('div.content').html(html);
-        },
+        error: function() { popover('#loginfailurepopover'); },
         success: function(xml) {
             profile = process_steam_profile(xml);
             render();
@@ -462,6 +456,17 @@ $(document).ready(function(){
         <br/>
         <p><a style='text-decoration: underline;' href='auth.php'>
           Click here to log in through steamcommunity.com</a></p>
+        </center>
+    </div>
+
+    <div id='loginfailurepopover'>
+        <center>
+        <p>We're having trouble accessing your Steam Community profile.</p>
+        <br/>
+        <p>This is probably a temporary network glitch. Please try again later.</p>
+        <br/>
+        <p><a style='text-decoration: underline;' href='http://store.steampowered.com/'>
+          Click here to shop for games on Steam in the meantime.</a></p>
         </center>
     </div>
 
