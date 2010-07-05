@@ -50,6 +50,7 @@ function render()
     });
 
     $('div.taglist').one("click", function() { clicked_taglist($(this)); });
+    $('div.searchbox').css('visibility', 'visible');
 } // render
 
 function process_steam_profile(xml)
@@ -382,7 +383,7 @@ $(document).ready(function(){
       <div id="global_header"> 
         <img class='avatar' src='loading.gif'/>
         <div class='nickname'>Loading your steam profile...</div>
-        <div class='searchbox'> 
+        <div class='searchbox' style='visibility: hidden;'> 
           <input class='tagfilter' name='filter' type='text'
                  onFocus='focus_filter_textbox();' 
                  onBlur='run_filter();'
