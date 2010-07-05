@@ -77,6 +77,7 @@ div.nickname {
 }
 
 div.main {
+	display:none;
 	background-image: url(content_bg.png);
 	background-repeat: repeat-x;
 	background-color: #000000;
@@ -88,6 +89,19 @@ td.gamecell {
 
 img.avatar {
 	padding: 3px;
+}
+
+#loadingmessage {
+	display:none;
+	position:fixed;
+	_position:absolute; /* hack for internet explorer 6*/
+	width:408px;
+	background:#4a4746;
+	color: #cdc9c0;
+	border:2px solid #cecece;
+	z-index:2;
+	padding:12px;
+	font-size:13px;
 }
 
 #backgroundpopover {  

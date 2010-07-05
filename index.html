@@ -7,7 +7,47 @@
     <script type="text/javascript">
 <!--
 
-var profile = null;
+var profile = null;  // all the user state.
+
+var current_popover = null;
+function end_popover()
+{
+    if (current_popover != null)
+    {
+        $(current_popover).fadeOut("slow");
+        $("#backgroundpopover").fadeOut("slow");  
+        current_popover = null;
+    } // if
+} // end_popover
+
+function popover(element)
+{
+    if (current_popover != null)
+        $(current_popover).fadeOut("slow");
+
+    current_popover = element;
+
+    var windowWidth = document.documentElement.clientWidth;
+    var windowHeight = document.documentElement.clientHeight;
+    var popupWidth = windowWidth / 2;
+    $(element).css('width', popupWidth);
+
+    var popupHeight = $(element).height();
+
+    $(element).css({
+        position: 'absolute',
+        top: (windowHeight - popupHeight) / 2,
+        left: (windowWidth - popupWidth) / 2,
+        width: popupWidth,
+        height: popupHeight,
+    });
+
+    $('#backgroundpopover').css('height', windowHeight);
+    $("#backgroundpopover").css('opacity', '0.7');
+    $("#backgroundpopover").fadeIn('slow');
+    $(element).fadeIn('slow');
+} // popover
+
 
 // !!! FIXME: this is kinda nasty.
 function resize_ui()
@@ -56,33 +96,12 @@ function render()
     });
 
     $('div.taglist').one("click", function() { clicked_taglist($(this)); });
-    $('div.searchbox').css('visibility', 'visible');
     $('a#profileurl').attr('href', profile.profileurl);
     resize_ui();
+
+    $('div.main').show();
+    end_popover();
 } // render
-
-function popover(element)
-{
-    var windowWidth = document.documentElement.clientWidth;
-    var windowHeight = document.documentElement.clientHeight;
-    var popupWidth = windowWidth / 2;
-    $(element).css('width', popupWidth);
-
-    var popupHeight = $(element).height();
-
-    $(element).css({
-        position: 'absolute',
-        top: (windowHeight - popupHeight) / 2,
-        left: (windowWidth - popupWidth) / 2,
-        width: popupWidth,
-        height: popupHeight,
-    });
-
-    $('#backgroundpopover').css('height', windowHeight);
-    $("#backgroundpopover").css('opacity', '0.7');
-    $("#backgroundpopover").fadeIn('slow');
-    $(element).fadeIn('slow');
-} // popover
 
 function process_steam_profile(xml)
 {
@@ -90,14 +109,12 @@ function process_steam_profile(xml)
     var steamid = prof.find('steamid').text();
     if (steamid == '0')
     {
-        $('img.avatar').hide();
         popover('#loginpopover');
         return null;
     } // if
 
     if (prof.find('valid').text() != '1')
     {
-        $('img.avatar').hide();
         var url = 'http://steamcommunity.com/profiles/' + steamid + '/edit/settings';
         $('a#privpage').attr('href', url);
         popover('#privateprofilepopover');
@@ -388,6 +405,7 @@ function clicked_taglist(element)
 // kick off AJAX load of user profile when document is ready for action.
 $(document).ready(function(){
     $(window).resize( function() { resize_ui(); } );
+    popover('#loadingmessage');
     $.ajax({
         type: "GET",
         url: "steamprofile.php",
@@ -414,7 +432,7 @@ $(document).ready(function(){
       <div class="global_header"> 
         <img class='avatar' width='64' height='64' src='loading.gif'/>
         <div class='nickname'></div>
-        <div class='searchbox' style='visibility: hidden;'> 
+        <div class='searchbox'> 
           <input class='tagfilter' name='filter' type='text'
                  onFocus='focus_filter_textbox();' 
                  onBlur='run_filter();'
@@ -438,6 +456,12 @@ $(document).ready(function(){
         <a href='auth.php?logout=1'>logout</a>
         ]
       </div>
+    </div>
+
+    <div id='loadingmessage'>
+        <center>
+            Loading your Steam Community profile...
+        </center>
     </div>
 
     <div id='loginpopover'>
