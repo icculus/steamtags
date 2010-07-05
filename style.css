@@ -116,6 +116,19 @@ img.avatar {
 	font-size:13px;
 }
 
+#privateprofilepopover {
+	display:none;
+	position:fixed;
+	_position:absolute; /* hack for internet explorer 6*/
+	width:408px;
+	background:#FF0000;
+	color:#FFFFFF;
+	border:2px solid #cecece;
+	z-index:2;
+	padding:12px;
+	font-size:13px;
+}
+
 div.taglist {
    display: inline;
 }

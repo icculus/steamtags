@@ -33,11 +33,12 @@ if (!isset($_SESSION['steamid']))
     exit(0);
 } // if
 
-$profile = load_steam_profile($_SESSION['steamid']);
+$steamid = $_SESSION['steamid'];
+$profile = load_steam_profile($steamid);
 
 if ($profile == NULL)
 {
-    print('<profile><valid>0</valid></profile>');
+    print("<profile><steamid>$steamid</steamid><valid>0</valid></profile>");
     exit(0);
 } // if
 
