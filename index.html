@@ -101,7 +101,7 @@ function process_steam_profile(xml)
             title: $(this).find('title').text(),
             logourl: $(this).find('logourl').text(),
             storeurl: $(this).find('storeurl').text(),
-            filtered: true,
+            tagmatchcount: 0,
             element: null,
             tags: new Array,
         };
@@ -167,7 +167,7 @@ function run_filter()
         for (var i in profile.tagmap[tag])
         {
             var game = profile.tagmap[tag][i];
-            game.filtered = false;
+            game.tagmatchcount++;
         } // for
     } // for
 
@@ -175,13 +175,11 @@ function run_filter()
     for (var i in profile.gamelist)
     {
         var game = profile.gamelist[i];
-        if (game.filtered)
+        if (game.tagmatchcount != filtertags.length)
             game.element.hide();
         else
-        {
             game.element.show();
-            game.filtered = true;   // reset this for next time.
-        } // else
+        game.tagmatchcount = 0;   // reset this for next time.
     } // for
 } // run_filter
 
