@@ -44,7 +44,7 @@ if (!$failed)
 } // if
 
 // split into an array, and then into a hashtable to kill duplicates.
-$tags = explode($tagstr, ' ');
+$tags = explode(' ', $tagstr);
 $tagshash = array();
 foreach ($tags as $t)
 {
@@ -53,7 +53,7 @@ foreach ($tags as $t)
         $tagshash[$str] = true;
 } // foreach
 $tags = $tagshash;
-unset $tagshash;
+unset($tagshash);
 
 
 // !!! FIXME: This is all kinds of nasty. And a race condition.
@@ -93,39 +93,45 @@ if (!$failed)
         if (!isset($tags[$e]))
             $remove[] = $id;
     } // foreach
+} // if
 
+if (!$failed && (count($remove) > 0))
+{
     $sql = "update gametags set deleted=NOW(), deletedipaddr=$ipaddr where" .
            " steamid=$steamid and appid=$appid and deleted is null and (";
     $or = '';
     foreach ($remove as $id)
+    {
         $sql .= "${or}id=$id";
         $or = ' or ';
-    }
+    } // foreach
     $sql .= ')';
+
     if (do_dbupdate($sql, -1) === false)
         $failed = true;
 } // if
 
-if (!$failed)
+if (!$failed && (count($insert) > 0))
 {
     $sql = "insert into gametags (steamid, appid, tag, ipaddr, posted) values";
     $comma = '';
     foreach ($insert as $t)
     {
-        $sql .= "$comma ($steamid, $appid, $t, $ipaddr, NOW())";
+        $sqltag = db_escape_string($t);
+        $sql .= "$comma ($steamid, $appid, $sqltag, $ipaddr, NOW())";
         $comma = ',';
     } // foreach
 
-    if (do_dbinsert($sql, -1) === false)
+    if (do_dbinsert($sql, count($insert)) === false)
         $failed = true;
 } // if
 
 $result = $failed ? '0' : '1';
 
-print('<response>');
+print('<savetags>');
     print("<result>$result</result>");
     print("<appid>$appid</appid>");
-print('</response>');
+print('</savetags>');
 
 exit(0);
 
