@@ -102,6 +102,8 @@ img.avatar {
 	z-index:2;
 	padding:12px;
 	font-size:13px;
+	-moz-border-radius: 10px;
+	-webkit-border-radius: 10px;
 }
 
 #backgroundpopover {  
@@ -127,6 +129,8 @@ img.avatar {
 	z-index:2;
 	padding:12px;
 	font-size:13px;
+	-moz-border-radius: 10px;
+	-webkit-border-radius: 10px;
 }
 
 #loginfailurepopover {
@@ -139,6 +143,8 @@ img.avatar {
 	z-index:2;
 	padding:12px;
 	font-size:13px;
+	-moz-border-radius: 10px;
+	-webkit-border-radius: 10px;
 }
 
 #privateprofilepopover {
@@ -152,6 +158,8 @@ img.avatar {
 	z-index:2;
 	padding:12px;
 	font-size:13px;
+	-moz-border-radius: 10px;
+	-webkit-border-radius: 10px;
 }
 
 div.taglist {
