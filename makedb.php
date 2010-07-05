@@ -18,6 +18,8 @@ if ((!isset($argv[1])) || ($argv[1] != '--confirm'))
     exit(0);
 } // if
 
+$GDebugSQL = true;
+$GDebugSQLErrors = true;
 
 echo "Nuking any existing database (too late to go back, now!)...\n";
 do_dbquery("drop database if exists $dbname");
@@ -34,10 +36,10 @@ do_dbquery(
         " steamid bigint not null," .
         " appid int unsigned not null," .
         " tag varchar(64) not null," .
-        " ipaddr unsigned int not null," .
+        " ipaddr int unsigned not null," .
         " posted datetime not null," .
         " deleted datetime default null," .
-        " deletedipaddr unsigned int default null," .
+        " deletedipaddr int unsigned default null," .
         " index gametag_index (steamid, appid)," .
         " primary key (id)" .
     " ) character set utf8"

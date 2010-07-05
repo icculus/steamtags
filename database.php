@@ -5,16 +5,22 @@
 
 require_once 'dbpass.php';
 
+$GDebugSQL = false;
+$GDebugSQLErrors = true;
 $dblink = NULL;
 
 function write_error($err)
 {
-    //print("\n\n$err\n\n");
+    global $GDebugSQLErrors;
+    if ($GDebugSQLErrors)
+        print("\n\nERROR: $err\n\n");
 } // write_error
 
 function write_debug($err)
 {
-    //print("\n\n$err\n\n");
+    global $GDebugSQL;
+    if ($GDebugSQL)
+        print("\n\nDEBUG: $err\n\n");
 } // write_debug
 
 function get_dblink()
