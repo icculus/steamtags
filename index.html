@@ -240,6 +240,7 @@ function save_tags(appid, tagstr)
             if (element == null)
                 return;
 
+            // !!! FIXME: get this from the stylesheet
             element.css('color', '#FFFFFF');
             element.one("click", function() { clicked_taglist($(this)); });
         },
@@ -310,6 +311,7 @@ function process_tag_edit(element)
     if (tagstr == '')
         tagstr = '(none)';
     parentdiv.html(' ' + tagstr);
+    // !!! FIXME: get this from the stylesheet
     parentdiv.css('color', '#777777');
 } // process_tag_edit
 
