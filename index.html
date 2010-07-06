@@ -58,7 +58,7 @@ function ui_resize()
         top: (windowHeight - popupHeight) / 2,
         left: (windowWidth - popupWidth) / 2,
         width: popupWidth,
-        height: popupHeight,
+        height: popupHeight
     });
 } // ui_resize
 
@@ -150,13 +150,13 @@ function process_steam_profile(xml)
         weblinks: new Array(),
         gamelist: new Array(),
         filter: '',
-        tagmap: new Object(),
+        tagmap: new Object()
     }
 
     prof.find('weblink').each(function(){
         retval['weblinks'].push({
             title: $(this).find('title').text(),
-            url: $(this).find('url').text(),
+            url: $(this).find('url').text()
         });
     })
 
@@ -168,7 +168,7 @@ function process_steam_profile(xml)
             storeurl: $(this).find('storeurl').text(),
             tagmatchcount: 0,
             element: null,
-            tags: new Array,
+            tags: new Array
         };
 
         $(this).find('tag').each(function(){
@@ -314,7 +314,7 @@ function save_tags(appid, tagstr)
             // !!! FIXME: get this from the stylesheet
             element.css('color', '#FFFFFF');
             element.one("click", function() { clicked_taglist($(this)); });
-        },
+        }
     });
 } // save_tags
 
@@ -433,7 +433,7 @@ $(document).ready(function(){
         success: function(xml) {
             profile = process_steam_profile(xml);
             render();
-        },
+        }
     });
 });
 
