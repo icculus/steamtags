@@ -62,6 +62,59 @@ function ui_resize()
     });
 } // ui_resize
 
+
+var tutorial_stage = -1;
+var tutorial_timer = null;
+function end_tutorial_stage()
+{
+    if (tutorial_timer != null)
+    {
+        clearTimeout(tutorial_timer);
+        tutorial_timer = null;
+    } // if
+
+    if (tutorial_stage >= 0)
+        $('div#tutorial' + tutorial_stage).fadeOut('slow');
+} // end_tutorial_stage
+
+function tutorial()
+{
+    end_tutorial_stage();
+    tutorial_stage++;
+    var element = $('div#tutorial' + tutorial_stage);
+    if (element.length == 0)
+        return;  // ran out of tutorial.
+
+    var tut = $('div#tutorial' + tutorial_stage);
+    var target = $(tut.attr('tutorialtarget'));
+
+    var left = target.offset().left + 5;
+    var window_width = document.documentElement.clientWidth;
+    if ((left + tut.width()) > window_width)
+        left = (window_width - tut.width()) - 30;
+
+    var top = target.offset().top + target.height() + 5;
+    var window_height = document.documentElement.clientHeight;
+    if ((top + tut.height()) > window_height)
+        top = (window_height - tut.height()) - 30;
+
+    tut.css({ position: 'absolute', top: top, left: left }); 
+    tut.fadeIn('slow');
+    tutorial_timer = setTimeout('tutorial();', tut.attr('tutorialtimeout'));
+} // tutorial
+
+function halt_tutorial()
+{
+    end_tutorial_stage();
+    tutorial_stage = -1;
+} // halt_tutorial
+
+function restart_tutorial()
+{
+    halt_tutorial();
+    tutorial();
+} // restart_tutorial
+
 function render()
 {
     if (profile == null)
@@ -76,10 +129,10 @@ function render()
         var game = profile.gamelist[gameidx];
         var html = "<tr class='gamerow' profilegameidx='" + gameidx + "'>" +
                    "<td class='gamecell'>" +
+                   "<a href='steam://run/" + game.appid + "'>" + 
                    "<img width='123' height='45' src='" + game.logourl + "'/>" +
-                   "<td class='gamecell'>" +
-                   "<h4><a href='steam://run/" + game.appid + "'>" + 
-                   game.title + "</a></h4><div class='tagline'>Tags:" +
+                   "</a><td class='gamecell'>" +
+                   "<h4>" + game.title + "</h4><div class='tagline'>Tags:" +
                    "<div class='taglist' profilegameidx=" + gameidx + ">";
 
         if (game.tags.length == 0)
@@ -103,6 +156,16 @@ function render()
     $('a#profileurl').attr('href', profile.profileurl);
     $('div.main').show();
     end_popover();
+
+    var has_tags = false;
+    for (var i in profile.tagmap)
+    {
+        has_tags = true;
+        break;
+    } // for
+
+    if (!has_tags)
+        restart_tutorial();
 } // render
 
 function process_steam_profile(xml)
@@ -458,7 +521,7 @@ $(document).ready(function(){
           <div class='navbar'>
             <center>
             [
-            <a target='_blank' href='http://store.steampowered.com/'>buy games</a>
+            <a href='javascript:restart_tutorial();'>help</a>
             -
             <a target='_blank' href='http://hg.icculus.org/icculus/steamtags'>source code</a>
             -
@@ -534,6 +597,70 @@ $(document).ready(function(){
         <p><a href='http://store.steampowered.com'>
           Click here to go shopping!</a></p>
       </center>
+    </div>
+
+    <div class='tutorial' id='tutorial0' 
+     tutorialtarget='div.taglist:first' tutorialtimeout='15000'>
+      <center>
+        <p>Click a game's tags, and then you can edit them.</p>
+        <br/>
+        <p>Just type in some simple words, separated with spaces. Describe
+           the game.</p>
+        <br/>
+        <p>If this game were <a target='_blank' href='http://store.steampowered.com/app/26800'>Braid</a>, you might type in:</p>
+        <p><code>platformer indie puzzle steamplay</code></p>
+        <p>Or <a target='_blank' href='http://store.steampowered.com/app/1250'>Killing Floor</a> might be:</p>
+        <p><code>fps multiplayer zombies</code></p>
+        <br/>
+        <p>Use any words you like to describe the game. You'll be able to
+           find this game later through these words.</p>
+        <br/>
+        <p>When you're done, just click elsewhere to save.</p>
+      </center>
+    </div>
+
+    <div class='tutorial' id='tutorial1'
+     tutorialtarget='div.searchbox' tutorialtimeout='10000'>
+      <center>
+        <p>Next, type in some tags here.</p>
+        <br/>
+        <p>The list of games will filter down to exactly match the tags you
+           typed, as you type them.</p>
+        <p>Now you can find your games based on arbitrary criteria you choose!</p>
+      </center>
+    </div>
+
+    <div class='tutorial' id='tutorial2'
+     tutorialtarget='td.gamecell > a > img:first' tutorialtimeout='8000'>
+      <center>
+        <p>Click a game's icon to launch it.</p>
+        <br/>
+        <p>This will tell the Steam client to install and run the game.</p>
+        <p>You'll need to have Steam installed for this to work.</p>
+      </center>
+    </div>
+
+    <div class='tutorial' id='tutorial3'
+     tutorialtarget='img.avatar' tutorialtimeout='3000'>
+      <center>
+        This is you. A beautiful and unique snowflake.
+      </center>
+    </div>
+
+    <div class='tutorial' id='tutorial4'
+     tutorialtarget='div.navbar' tutorialtimeout='10000'>
+      <center>
+        <p>Here are some various useful links.</p>
+        <br/>
+        <p>Definitely consider clicking the 'feedback' one and telling Ryan
+           what you think. Javascript hacker? Grab the source code. Bored?
+           Buy something ('Powered by Steam'). Done? Logout.</p>
+        <br/>
+        <p>Clicking 'help' reruns this tutorial.</p>
+      </center>
+      <br/>
+      <p align='right'>Have fun!</p>
+      <p align='right'>--ryan.</p>
     </div>
 
     <div id='backgroundpopover'></div>
