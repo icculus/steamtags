@@ -396,8 +396,9 @@ function clicked_taglist(element)
     if (tagstr == '(none)')
         tagstr = '';
 
-    var html = "<input size='100' class='tagedit' name='tagedit' type='text'" +
-               "value='" + tagstr + "' autocomplete='off'/>";
+    var html = "<input type='text' autocapitalize='off' size='100'" +
+               " class='tagedit' name='tagedit'" +
+               " value='" + tagstr + "'/>";
     element.html(html);
 
     editor = $("input.tagedit");
@@ -446,7 +447,8 @@ $(document).ready(function(){
         <div class='nickname'></div>
         <div class='controls'>
           <div class='searchbox'> 
-            <input class='tagfilter' name='filter' type='text'
+            <input type='text' autocapitalize='off'
+                   class='tagfilter' name='filter'
                    onFocus='focus_filter_textbox();' 
                    onBlur='run_filter();'
                    onChange='run_filter();' 
