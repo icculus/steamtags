@@ -26,13 +26,32 @@ function popover(element)
         $(current_popover).fadeOut("slow");
 
     current_popover = element;
+    ui_resize();  // make this sane.
+
+    $("#backgroundpopover").css('opacity', '0.7');
+    $("#backgroundpopover").fadeIn('slow');
+    $(element).fadeIn('slow');
+
+    // I guess this doesn't actually recalculate the element sizes until the
+    //  scripts are idle, so do a short timeout so it rechecks this after
+    //  the layout has a chance to catchup.
+    setTimeout('ui_resize();', 10);
+} // popover
+
+function ui_resize()
+{
+    var element = current_popover;
+    if (element == null)
+        return;
+
+    $('#backgroundpopover').css('height', windowHeight);
 
     var windowWidth = document.documentElement.clientWidth;
     var windowHeight = document.documentElement.clientHeight;
     var popupWidth = windowWidth / 2;
     $(element).css('width', popupWidth);
 
-    var popupHeight = $(element).height();
+    var popupHeight = $(element).children().height();
 
     $(element).css({
         position: 'absolute',
@@ -41,12 +60,7 @@ function popover(element)
         width: popupWidth,
         height: popupHeight,
     });
-
-    $('#backgroundpopover').css('height', windowHeight);
-    $("#backgroundpopover").css('opacity', '0.7');
-    $("#backgroundpopover").fadeIn('slow');
-    $(element).fadeIn('slow');
-} // popover
+} // ui_resize
 
 function render()
 {
@@ -404,6 +418,11 @@ function clicked_taglist(element)
 
 // kick off AJAX load of user profile when document is ready for action.
 $(document).ready(function(){
+    $(window).resize( function() { ui_resize(); } );
+
+    // Mobile Safari (etc?) orientation support.
+    window.onorientationchange = function() { ui_resize(); }
+
     popover('#loadingmessage');
     $.ajax({
         type: "GET",
