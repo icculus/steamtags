@@ -1,2 +1,4 @@
 syntax:glob
 localcfg.php
+statistics
+
