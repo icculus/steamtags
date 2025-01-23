@@ -128,12 +128,12 @@ if (!$failed && (count($insert) > 0))
 
 $result = $failed ? '0' : '1';
 
-print('<savetags>');
-    print("<result>$result</result>");
-    print("<appid>$appid</appid>");
-print('</savetags>');
+print('<?xml version="1.0" encoding="UTF-8"?>' . "\n");
+print("<savetags>\n");
+print("  <result>$result</result>\n");
+print("  <appid>$appid</appid>\n");
+print("</savetags>\n");
 
 exit(0);
 
 ?>
-
