@@ -17,27 +17,22 @@
 </ifmodule>
 
 <Files .htaccess>
-    order allow,deny
-    deny from all
+    Require all denied
 </Files>
 
 <Files .hg>
-    order allow,deny
-    deny from all
+    Require all denied
 </Files>
 
 <Files localcfg.php>
-    order allow,deny
-    deny from all
+    Require all denied
 </Files>
 
 <Files database.php>
-    order allow,deny
-    deny from all
+    Require all denied
 </Files>
 
 <Files steamtags.php>
-    order allow,deny
-    deny from all
+    Require all denied
 </Files>
 
