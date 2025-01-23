@@ -1,8 +1,10 @@
 # Steam Tags
 
-I don't know if this still works, or if Steam's API has changed.
+This actually still works (January 2025), and you can try it at:
 
-At one time, this let you point your public Steam profile at a
+https://steamtags.icculus.org/
+
+This lets you point your public Steam profile at a
 website that would let you tag games you own, and then use those
 tags to categorize your library.
 
