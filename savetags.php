@@ -97,7 +97,7 @@ if (!$failed)
 
 if (!$failed && (count($remove) > 0))
 {
-    $sql = "update gametags set deleted=NOW(), deletedipaddr=$ipaddr where" .
+    $sql = "update gametags set deleted=date('now'), deletedipaddr=$ipaddr where" .
            " steamid=$steamid and appid=$appid and deleted is null and (";
     $or = '';
     foreach ($remove as $id)
@@ -118,7 +118,7 @@ if (!$failed && (count($insert) > 0))
     foreach ($insert as $t)
     {
         $sqltag = db_escape_string($t);
-        $sql .= "$comma ($steamid, $appid, $sqltag, $ipaddr, NOW())";
+        $sql .= "$comma ($steamid, $appid, $sqltag, $ipaddr, date('now'))";
         $comma = ',';
     } // foreach
 

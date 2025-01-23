@@ -1,6 +1,6 @@
 <?php
 
-// This file adds a little bit of a wrapper over MySQL, and a little
+// This file adds a little bit of a wrapper over sqlite3, and a little
 //  bit of convenience functionality.
 
 require_once 'localcfg.php';
@@ -29,20 +29,12 @@ function get_dblink()
 
     if ($dblink == NULL)
     {
-        global $dbhost, $dbuser, $dbpass, $dbname;
-        $dblink = mysql_connect($dbhost, $dbuser, $dbpass);
-        if (!$dblink)
+        global $dbfile;
+        $dblink = new SQLite3($dbfile, SQLITE3_OPEN_READWRITE);
+        if ($dblink == false)
         {
-            $err = mysql_error();
+            $err = "please try again later";
             write_error("Failed to open database link: ${err}.");
-            $dblink = NULL;
-        } // if
-
-        if (!mysql_select_db($dbname))
-        {
-            $err = mysql_error();
-            write_error("Failed to select database: ${err}.");
-            mysql_close($dblink);
             $dblink = NULL;
         } // if
     } // if
@@ -63,13 +55,14 @@ function close_dblink($link = NULL)
     } // if
 
     if ($closeme != NULL)
-        mysql_close($closeme);
+        $closeme->close();
 } // close_dblink
 
 
 function db_escape_string($str)
 {
-    return("'" . mysql_escape_string($str) . "'");
+    global $dblink;
+    return("'" . $dblink->escapeString($str) . "'");
 } // db_escape_string
 
 
@@ -84,12 +77,12 @@ function do_dbquery($sql, $link = NULL, $suppress_output = false)
     if (!$suppress_output)
         write_debug("SQL query: [$sql;]");
 
-    $rc = mysql_query($sql, $link);
+    $rc = $link->query($sql);
     if ($rc == false)
     {
         if (!$suppress_output)
         {
-            $err = mysql_error();
+            $err = $link->lastErrorMsg();
             write_error("Problem in SELECT statement: {$err}");
         } // if
         return(false);
@@ -97,7 +90,6 @@ function do_dbquery($sql, $link = NULL, $suppress_output = false)
 
     return($rc);
 } // do_dbquery
-
 
 function do_dbwrite($sql, $verb, $expected_rows = 1, $link = NULL)
 {
@@ -109,21 +101,23 @@ function do_dbwrite($sql, $verb, $expected_rows = 1, $link = NULL)
 
     write_debug("SQL $verb: [$sql;]");
 
-    $rc = mysql_query($sql, $link);
+    $rc = $link->query($sql);
     if ($rc == false)
     {
-        $err = mysql_error();
+        $err = $link->lastErrorMsg();
         $upperverb = strtoupper($verb);
         write_error("Problem in $upperverb statement: {$err}");
         return(false);
     } // if
 
-    $retval = mysql_affected_rows($link);
+    $retval = db_num_rows($rc);
+/*
     if (($expected_rows >= 0) and ($retval != $expected_rows))
     {
-        $err = mysql_error();
+        $err = $link->lastErrorMsg();
         write_error("Database $verb error: {$err}");
     } // if
+*/
 
     return($retval);
 } // do_dbwrite
@@ -147,27 +141,32 @@ function do_dbdelete($sql, $expected_rows = 1, $link = NULL)
 } // do_dbdelete
 
 
-function db_num_rows($query)
+function db_num_rows($rows)
 {
-    return(mysql_num_rows($query));
+    $nrows = 0;
+    $rows->reset();
+    while ($rows->fetchArray())
+        $nrows++;
+    $rows->reset();
+    return $nrows;
 } // db_num_rows
 
 
 function db_reset_array($query)
 {
-    return(mysql_data_seek($query, 0));
+    $query->reset();
 } // db_reset_array
 
 
 function db_fetch_array($query)
 {
-    return(mysql_fetch_assoc($query));
+    return $query->fetchArray();
 } // db_fetch_array
 
 
 function db_free_result($query)
 {
-    return(mysql_free_result($query));
+    return($query->finalize());
 } // db_free_result
 
 ?>
