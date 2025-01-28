@@ -20,7 +20,15 @@
     Require all denied
 </Files>
 
-<Files .hg>
+<Files .git>
+    Require all denied
+</Files>
+
+<Files .github>
+    Require all denied
+</Files>
+
+<Files .gitignore>
     Require all denied
 </Files>
 
